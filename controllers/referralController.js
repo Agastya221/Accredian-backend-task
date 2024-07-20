@@ -1,4 +1,3 @@
-// controllers/referralController.js
 
 import { PrismaClient } from '@prisma/client';
 import nodemailer from 'nodemailer';
@@ -46,6 +45,18 @@ export const createReferral = async (req, res) => {
 
     res.status(201).json({ message: 'Referral submitted successfully', referral });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error while submitting referral:', error);
+    res.status(500).json({ error: 'Error while sending the mail' });
+  }
+};
+
+// get all referrals
+export const getAllReferrals = async (req, res) => {
+  try {
+    const referrals = await prisma.referral.findMany();
+    res.status(200).json(referrals);
+  } catch (error) {
+    console.error('Error while retrieving referrals:', error);
+    res.status(500).json({ error: 'Error while retrieving referrals' });
   }
 };
